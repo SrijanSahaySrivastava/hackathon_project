@@ -1,3 +1,4 @@
+const { DisTube } = require('distube')
 const Discord = require('discord.js')
 const client = new Discord.Client({
   intents: [
@@ -11,11 +12,17 @@ const fs = require('fs')
 const config = require('./config.json')
 
 client.config = require('./config.json')
+client.distube = new DisTube(client, {
+  leaveOnStop: false,
+  emitNewSongOnly: true,
+  emitAddSongWhenCreatingQueue: false,
+  emitAddListWhenCreatingQueue: false,
+
+})
 client.commands = new Discord.Collection()
 client.aliases = new Discord.Collection()
 client.emotes = config.emoji
 
-// taking command files
 fs.readdir('./commands/', (err, files) => {
   if (err) return console.log('Could not find any commands!')
   const jsFiles = files.filter(f => f.split('.').pop() === 'js')
@@ -29,10 +36,9 @@ fs.readdir('./commands/', (err, files) => {
 })
 
 client.on('ready', () => {
-  console.log(`${client.user.tag} is ready to play music.`)
+  console.log(`${client.user.tag} is ready to play music.\n ${config.prefix} prefix set.`)
 })
 
-// taking messages and spliting
 client.on('messageCreate', async message => {
   if (message.author.bot || !message.guild) return
   const prefix = config.prefix
@@ -89,8 +95,8 @@ client.distube
 // .on("searchResult", (message, result) => {
 //     let i = 0
 //     message.channel.send(
-//         `**Choose an option from below**\n${result
-//             .map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``)
+//         `*Choose an option from below*\n${result
+//             .map(song => `*${++i}*. ${song.name} - \`${song.formattedDuration}\``)
 //             .join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`
 //     )
 // })
@@ -103,4 +109,3 @@ client.distube
 // .on("searchDone", () => {})
 
 client.login(config.token)
-
