@@ -8,3 +8,10 @@ Requirments:-
   | @discordjs/opus
   | Ffmpeg
   | discord token of a Bot
+
+
+Technologies Used[needed]:-
+  | Node.js
+  | ytdl
+  | ytsr
+  | Discord(Software)
